@@ -1,9 +1,12 @@
 "use client";
 
 import { useRef } from "react";
+import Image from "next/image";
 import { ChevronRightIcon } from "./icons";
 
-export default function SubcategoryCarousel({ items }: { items: readonly string[] }) {
+type Subcategory = { name: string; imageUrl: string };
+
+export default function SubcategoryCarousel({ items }: { items: readonly Subcategory[] }) {
   const scrollerRef = useRef<HTMLDivElement>(null);
 
   function scrollNext() {
@@ -16,12 +19,16 @@ export default function SubcategoryCarousel({ items }: { items: readonly string[
         ref={scrollerRef}
         className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
       >
-        {items.map((name) => (
+        {items.map(({ name, imageUrl }) => (
           <div
             key={name}
             className="flex w-28 shrink-0 flex-col items-center gap-2 rounded-xl border border-zinc-200 p-3 text-center"
           >
-            <div className="h-16 w-16 rounded-lg bg-zinc-100" aria-hidden="true" />
+            <div className="relative h-16 w-16 overflow-hidden rounded-lg bg-zinc-100">
+              {imageUrl && (
+                <Image src={imageUrl} alt="" fill sizes="64px" className="object-contain p-1" />
+              )}
+            </div>
             <span className="text-xs font-medium text-zinc-700">{name}</span>
           </div>
         ))}
