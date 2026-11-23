@@ -12,4 +12,5 @@ export type Product = {
   imageUrl: string;
   badges: ProductBadge[];
   discountLabel?: string;
+  donationEligible: boolean;
 };

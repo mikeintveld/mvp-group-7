@@ -43,6 +43,7 @@ export const SUBCATEGORIES: { name: string; imageUrl: string }[] = [
 export const PRODUCTS: Product[] = [
   {
     id: "heinz-pastasaus-nduja",
+    donationEligible: false,
     name: "Pasta sauce nduja",
     brand: "Heinz",
     priceCents: 164,
@@ -57,6 +58,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "heinz-pastasaus-mascarpone-grana-padano",
+    donationEligible: false,
     name: "Pasta sauce mascarpone grana padano",
     brand: "Heinz",
     priceCents: 164,
@@ -71,6 +73,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "heinz-pastasaus-cherry-tomato-basil",
+    donationEligible: false,
     name: "Pasta sauce cherry tomato & basil",
     brand: "Heinz",
     priceCents: 189,
@@ -85,6 +88,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "cappelletti-prosciutto-crudo",
+    donationEligible: false,
     name: "Cappelletti prosciutto crudo",
     priceCents: 249,
     unitSize: "250 g",
@@ -96,6 +100,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "kokosmelk",
+    donationEligible: true,
     name: "Coconut milk",
     priceCents: 127,
     unitSize: "200 ml",
@@ -107,6 +112,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "conimex-kroepoek-bali",
+    donationEligible: false,
     name: "Prawn crackers Bali",
     brand: "Conimex",
     priceCents: 189,
@@ -119,6 +125,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "conimex-kroepoek-naturel",
+    donationEligible: false,
     name: "Prawn crackers plain",
     brand: "Conimex",
     priceCents: 169,
@@ -131,6 +138,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "excellent-girasoli-geitenkaas-honing",
+    donationEligible: false,
     name: "Excellent Girasoli goat cheese with honey",
     priceCents: 319,
     unitSize: "250 g",
@@ -142,6 +150,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "tagliatelle-all-uovo",
+    donationEligible: false,
     name: "Tagliatelle all'uovo",
     priceCents: 389,
     unitSize: "500 g",
@@ -153,6 +162,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "verse-ravioli-5-formaggio",
+    donationEligible: false,
     name: "Fresh ravioli 5 formaggio",
     priceCents: 249,
     unitSize: "250 g",
@@ -164,6 +174,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "zongedroogde-tomaten",
+    donationEligible: false,
     name: "Sun-dried tomatoes",
     priceCents: 159,
     unitSize: "285 g",
@@ -175,6 +186,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "basmatirijst",
+    donationEligible: true,
     name: "Basmati rice",
     priceCents: 165,
     unitSize: "1 kg",
@@ -186,6 +198,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "excellent-winterpasta",
+    donationEligible: false,
     name: "Excellent Winter pasta",
     priceCents: 139,
     unitSize: "250 g",
@@ -197,6 +210,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "groene-pesto",
+    donationEligible: false,
     name: "Green pesto",
     priceCents: 113,
     unitSize: "190 g",
@@ -210,6 +224,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "gnocchi",
+    donationEligible: false,
     name: "Gnocchi",
     priceCents: 149,
     unitSize: "500 g",
@@ -221,6 +236,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "gebakken-uitjes",
+    donationEligible: false,
     name: "Fried onions",
     priceCents: 149,
     unitSize: "150 g",
@@ -232,6 +248,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "tomatenpuree",
+    donationEligible: true,
     name: "Tomato puree",
     priceCents: 49,
     unitSize: "70 g",
@@ -245,6 +262,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "mutti-polpa-tomatenpulp",
+    donationEligible: true,
     name: "Polpa fine tomato pulp",
     brand: "Mutti",
     priceCents: 199,
@@ -257,6 +275,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "penne",
+    donationEligible: true,
     name: "Penne",
     priceCents: 63,
     unitSize: "500 g",
@@ -268,6 +287,7 @@ export const PRODUCTS: Product[] = [
   },
   {
     id: "woknoedels-volkoren",
+    donationEligible: false,
     name: "Wholewheat wok noodles",
     priceCents: 129,
     unitSize: "250 g",
@@ -280,6 +300,7 @@ export const PRODUCTS: Product[] = [
   // Different department on purpose: used to test grouping-by-department in the cart (step 4).
   {
     id: "kanzi-appels-zak",
+    donationEligible: false,
     name: "Kanzi apples bag",
     priceCents: 349,
     unitSize: "1 kg",

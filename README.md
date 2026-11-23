@@ -1,9 +1,10 @@
-# GroceryShare (prototype)
+# groceryshop (prototype)
 
-Student prototype for RSM "Implementing Innovations", Group 7. This is the
-**basis** phase: a rebuilt supermarket product overview page plus a working
-shopping cart. The donation feature (One-Tap Product Donation) is not built
-yet — see "Future work" below.
+Student prototype for RSM "Implementing Innovations", Group 7. A rebuilt
+supermarket product overview page, a working shopping cart, and a first
+version of the donation feature (One-Tap Product Donation): a separate
+donation cart with its own section on the basket page and its own line in
+the receipt. See "Future work" below for what's still missing from OTPD.
 
 No backend, no login, no payment. Everything runs client-side on mock data.
 
@@ -36,11 +37,15 @@ npx tsc --noEmit
 - `lib/types.ts` — the `Product` type and `ProductBadge` union
 - `lib/money.ts` — cent-based price formatting and bonus/discount math
 - `lib/constants.ts` — `APP_NAME` (change this one constant to rename the app)
-- `context/CartContext.tsx` — cart state (`add`/`increment`/`decrement`/
-  `remove`/`clear`), persisted to `localStorage`
-- `components/` — all UI building blocks (`ProductCard`, `Header`,
-  `CartSummary`, etc.)
-- `app/globals.css` — the single configurable accent color (`--accent`)
+- `context/CartContext.tsx` — two separate carts (`cartType`: `"groceries" |
+  "donation"`) with the same actions (`add`/`increment`/`decrement`/`remove`/
+  `clear`), persisted to `localStorage`, plus `useCartTotals()` for the
+  header and `CartSummary`
+- `components/` — all UI building blocks (`ProductCard` supports a
+  `variant="donation"` prop, `FilterChips`, `Header`, `CartSummary`,
+  `DonationsSection`, etc.)
+- `app/globals.css` — the configurable accent color (`--accent`) and the
+  donation theme (`--donation`, `--donation-light`, `--donation-text`)
 
 ## Adding a product
 
@@ -59,6 +64,7 @@ Add an entry to the `PRODUCTS` array in `data/products.ts`:
   imageUrl: "",                   // leave empty to use the text placeholder
   badges: ["vegan"],              // any of: bonus, vegan, vegetarian, organic, new
   discountLabel: "50% off",       // optional
+  donationEligible: false,        // true = shown in the Donations section on /winkelmandje
 }
 ```
 
@@ -80,27 +86,29 @@ already allows that hostname via `images.remotePatterns`.
 
 ## Known limitations
 
-- No real product images (see above) — all cards use the text placeholder.
-- Filter chips (Bonus/New/Organic/Vegan/Vegetarian) and the search bar are
-  visual only; they don't actually filter or search yet.
+- No real product images for products added after the initial batch — see
+  above; `ProductCard` falls back to a text placeholder whenever `imageUrl`
+  is empty or fails to load.
+- The search bar is visual only; it doesn't actually search yet.
 - The subcategory carousel cards are not clickable (no subcategory pages
   exist yet).
 - "Checkout" only shows a message ("Checkout will be available in a later
-  phase") — there is no real checkout flow.
+  phase") — there is no real checkout flow, for either cart.
 - The heart/wishlist button is visual only (no wishlist feature).
 - Cart state lives in `localStorage` per browser/device — it is not synced
   across devices or shared between users.
-- Dark mode is not styled for the shop UI (only the original Next.js
-  boilerplate's `prefers-color-scheme` variables remain in `globals.css`).
+- No dark mode — the app always renders light, regardless of system/browser
+  preference (removed the original Next.js boilerplate's
+  `prefers-color-scheme` variables from `globals.css` on purpose).
 
-## Future work (not built yet)
+## Future work (OTPD — not built yet)
 
-The cart state already stores items per `cartType` (`"shopping" |
-"donation"`, see `context/CartContext.tsx`), so a second, separate donation
-cart can be added later without restructuring existing state. Planned for a
-later phase: an extra "donate" button next to the +/− controls, a donation
-menu shown before checkout, two separate receipts, and an impact screen.
-None of that UI exists yet.
+Done so far: a separate donation cart (`cartType: "donation"`), a Donations
+section on the basket page with its own product cards, and a split receipt
+(groceries + donations + grand total). Still missing from the full OTPD
+flow described in the original brief: a donation menu shown before checkout
+(~5 suggested products), two separate physical/digital receipts at checkout,
+and an impact screen. None of that UI exists yet.
 
 ## Verified test cases
 
@@ -112,3 +120,11 @@ Manually verified in the browser (see `components/CartSummary.tsx` /
   Total 8.04.
 - Removing all items returns the basket to its empty state and resets the
   header total to 0.00.
+- Groceries (1× "Pasta sauce nduja", 1.64) + donations (1× "Basmati rice",
+  1.65) → Groceries total 1.64, Donations total 1.65, Total 3.29; removing
+  the grocery item leaves the donation line untouched and vice versa.
+- Filter chips combine with AND logic (e.g. Bonus + Vegan narrows to the one
+  product matching both); a combination with zero matches shows "No products
+  match these filters" with a working "Clear filters" button.
+- Both carts persist independently across a page refresh (`localStorage` key
+  `groceryshare:cart`, shape `{ groceries: {...}, donation: {...} }`).

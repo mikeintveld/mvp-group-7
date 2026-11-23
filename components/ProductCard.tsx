@@ -6,16 +6,36 @@ import { formatCents } from "@/lib/money";
 import { useCart } from "@/context/CartContext";
 import { HeartIcon, LeafIcon, MinusIcon, PlusIcon, SproutIcon, TrashIcon } from "./icons";
 
-export default function ProductCard({ product }: { product: Product }) {
+type ProductCardVariant = "default" | "donation";
+
+export default function ProductCard({
+  product,
+  variant = "default",
+}: {
+  product: Product;
+  variant?: ProductCardVariant;
+}) {
+  const isDonation = variant === "donation";
+  const cartType = isDonation ? "donation" : "groceries";
+  const basketLabel = isDonation ? "donation basket" : "basket";
+
   const { getQuantity, add, increment, decrement } = useCart();
-  const quantity = getQuantity(product.id);
-  const isBonus = product.badges.includes("bonus") || Boolean(product.discountLabel);
+  const quantity = getQuantity(product.id, cartType);
+  const isBonus = !isDonation && (product.badges.includes("bonus") || Boolean(product.discountLabel));
   const hasOldPrice = Boolean(product.originalPriceCents);
   const displayName = product.brand ? `${product.brand} ${product.name}` : product.name;
 
+  const buttonColorClasses = isDonation
+    ? "bg-donation hover:bg-donation-text"
+    : isBonus
+      ? "bg-orange-600 hover:bg-orange-700"
+      : "bg-accent hover:brightness-110";
+
   return (
     <article className="flex flex-col">
-      <div className="relative aspect-square overflow-hidden rounded-xl bg-[#f2ede4]">
+      <div
+        className={`relative aspect-square overflow-hidden rounded-xl ${isDonation ? "bg-donation-light" : "bg-[#f2ede4]"}`}
+      >
         {product.imageUrl ? (
           <Image
             src={product.imageUrl}
@@ -59,7 +79,7 @@ export default function ProductCard({ product }: { product: Product }) {
               )}
             </div>
           )}
-          {product.discountLabel && (
+          {product.discountLabel && !isDonation && (
             <span className="rounded bg-orange-600 px-1.5 py-0.5 text-[11px] font-bold text-white">
               {product.discountLabel}
             </span>
@@ -86,26 +106,20 @@ export default function ProductCard({ product }: { product: Product }) {
           {quantity === 0 ? (
             <button
               type="button"
-              onClick={() => add(product.id)}
-              aria-label={`Add ${displayName} to basket`}
-              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white shadow-sm ${
-                isBonus ? "bg-orange-600 hover:bg-orange-700" : "bg-accent hover:brightness-110"
-              }`}
+              onClick={() => add(product.id, cartType)}
+              aria-label={`Add ${displayName} to ${basketLabel}`}
+              className={`flex h-9 w-9 shrink-0 items-center justify-center rounded-full text-white shadow-sm ${buttonColorClasses}`}
             >
               <PlusIcon className="h-5 w-5" />
             </button>
           ) : (
-            <div
-              className={`flex shrink-0 items-center gap-1 rounded-full text-white shadow-sm ${
-                isBonus ? "bg-orange-600" : "bg-accent"
-              }`}
-            >
+            <div className={`flex shrink-0 items-center gap-1 rounded-full text-white shadow-sm ${buttonColorClasses}`}>
               <button
                 type="button"
-                onClick={() => decrement(product.id)}
+                onClick={() => decrement(product.id, cartType)}
                 aria-label={
                   quantity === 1
-                    ? `Remove ${displayName} from basket`
+                    ? `Remove ${displayName} from ${basketLabel}`
                     : `Decrease quantity of ${displayName}`
                 }
                 className="flex h-9 w-9 items-center justify-center hover:brightness-110"
@@ -117,7 +131,7 @@ export default function ProductCard({ product }: { product: Product }) {
               </span>
               <button
                 type="button"
-                onClick={() => increment(product.id)}
+                onClick={() => increment(product.id, cartType)}
                 aria-label={`Increase quantity of ${displayName}`}
                 className="flex h-9 w-9 items-center justify-center hover:brightness-110"
               >

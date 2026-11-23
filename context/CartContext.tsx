@@ -2,10 +2,11 @@
 
 import { createContext, useContext, useEffect, useReducer, type ReactNode } from "react";
 import { PRODUCTS } from "@/data/products";
+import { discountCents } from "@/lib/money";
 
-// "donation" is unused for now but kept here so a second, separate cart (OTPD,
-// see project README) can be added later without restructuring this state.
-export type CartType = "shopping" | "donation";
+// Two separate carts: your own groceries, and products picked to donate to
+// the food bank (OTPD). They share the same actions/shape but never mix.
+export type CartType = "groceries" | "donation";
 
 type CartItems = Record<string, number>; // productId -> quantity
 type CartData = Record<CartType, CartItems>;
@@ -26,7 +27,7 @@ type CartAction =
   | { type: "clear"; cartType: CartType }
   | { type: "hydrate"; data: CartData };
 
-const EMPTY_DATA: CartData = { shopping: {}, donation: {} };
+const EMPTY_DATA: CartData = { groceries: {}, donation: {} };
 const INITIAL_STATE: ReducerState = { data: EMPTY_DATA, hydrated: false };
 const STORAGE_KEY = "groceryshare:cart";
 
@@ -114,12 +115,12 @@ export function CartProvider({ children }: { children: ReactNode }) {
 
   const value: CartContextValue = {
     state: state.data,
-    add: (productId, cartType = "shopping") => dispatch({ type: "add", cartType, productId }),
-    increment: (productId, cartType = "shopping") => dispatch({ type: "increment", cartType, productId }),
-    decrement: (productId, cartType = "shopping") => dispatch({ type: "decrement", cartType, productId }),
-    remove: (productId, cartType = "shopping") => dispatch({ type: "remove", cartType, productId }),
-    clear: (cartType = "shopping") => dispatch({ type: "clear", cartType }),
-    getQuantity: (productId, cartType = "shopping") => state.data[cartType][productId] ?? 0,
+    add: (productId, cartType = "groceries") => dispatch({ type: "add", cartType, productId }),
+    increment: (productId, cartType = "groceries") => dispatch({ type: "increment", cartType, productId }),
+    decrement: (productId, cartType = "groceries") => dispatch({ type: "decrement", cartType, productId }),
+    remove: (productId, cartType = "groceries") => dispatch({ type: "remove", cartType, productId }),
+    clear: (cartType = "groceries") => dispatch({ type: "clear", cartType }),
+    getQuantity: (productId, cartType = "groceries") => state.data[cartType][productId] ?? 0,
   };
 
   return <CartContext.Provider value={value}>{children}</CartContext.Provider>;
@@ -131,18 +132,34 @@ export function useCart(): CartContextValue {
   return ctx;
 }
 
-export function useCartSummary(cartType: CartType = "shopping") {
-  const { state } = useCart();
-  const items = state[cartType];
-
-  let itemCount = 0;
-  let totalCents = 0;
+function sumCartItems(items: CartItems) {
+  let count = 0;
+  let subtotalCents = 0;
+  let bonusCents = 0;
   for (const [productId, quantity] of Object.entries(items)) {
     const product = PRODUCTS.find((p) => p.id === productId);
     if (!product) continue;
-    itemCount += quantity;
-    totalCents += product.priceCents * quantity;
+    count += quantity;
+    subtotalCents += product.priceCents * quantity;
+    bonusCents += discountCents(product) * quantity;
   }
+  return { count, subtotalCents, bonusCents };
+}
 
-  return { itemCount, totalCents };
+// All cart totals in one place, in cents. Used by the header (grand total +
+// item count) and the split receipt on the basket page.
+export function useCartTotals() {
+  const { state } = useCart();
+  const groceries = sumCartItems(state.groceries);
+  const donation = sumCartItems(state.donation);
+
+  return {
+    groceriesCount: groceries.count,
+    groceriesSubtotalCents: groceries.subtotalCents,
+    bonusSavingsCents: groceries.bonusCents,
+    donationCount: donation.count,
+    donationSubtotalCents: donation.subtotalCents,
+    grandTotalCents: groceries.subtotalCents + donation.subtotalCents,
+    itemCount: groceries.count + donation.count,
+  };
 }
