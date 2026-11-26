@@ -41,14 +41,14 @@ export default function ProductCard({
           type="button"
           aria-label="About donating to the food bank"
           onClick={openDonationPopup}
-          className="absolute -top-3 -left-3 z-20 flex h-14 w-14 items-center justify-center rounded-xl bg-white p-1.5 shadow-md sm:h-16 sm:w-16 lg:h-[72px] lg:w-[72px]"
+          className="absolute -top-2 -left-2 z-20 w-9 sm:w-10 lg:w-12"
         >
           <Image
             src="/voedselbank-logo.png"
             alt="Voedselbank"
-            width={72}
-            height={72}
-            className="h-full w-full object-contain"
+            width={238}
+            height={211}
+            className="h-auto w-full object-contain voedselbank-wiggle"
           />
         </button>
       )}
@@ -62,10 +62,10 @@ export default function ProductCard({
             alt={product.name}
             fill
             sizes="(min-width: 1024px) 20vw, (min-width: 640px) 33vw, 50vw"
-            className="object-contain p-4"
+            className="object-contain p-7"
           />
         ) : (
-          <div className="flex h-full w-full items-center justify-center p-4 text-center text-xs font-medium text-zinc-500">
+          <div className="flex h-full w-full items-center justify-center p-7 text-center text-xs font-medium text-zinc-500">
             {displayName}
           </div>
         )}

@@ -52,45 +52,45 @@ export default function DonationPopup() {
         aria-labelledby="donation-popup-title"
         tabIndex={-1}
         onClick={(event) => event.stopPropagation()}
-        className="flex max-h-[95vh] w-full max-w-md flex-col overflow-hidden rounded-2xl bg-white shadow-xl outline-none sm:max-h-[85vh]"
+        className="flex max-h-[95vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl outline-none sm:max-h-[85vh]"
       >
-        <div className="grid shrink-0 grid-cols-[2.5rem_1fr_2.5rem] items-center border-b border-zinc-200 px-4 py-3">
+        <div className="grid shrink-0 grid-cols-[3rem_1fr_3rem] items-center border-b border-zinc-200 px-6 py-4">
           <div />
-          <h2 id="donation-popup-title" className="text-center text-base font-bold text-zinc-900">
+          <h2 id="donation-popup-title" className="text-center text-2xl font-bold text-zinc-900">
             Lovingly Donating
           </h2>
           <button
             type="button"
             onClick={close}
             aria-label="Close"
-            className="flex h-9 w-9 items-center justify-center justify-self-end rounded-lg border border-zinc-300 text-zinc-600 hover:bg-zinc-100"
+            className="flex h-10 w-10 items-center justify-center justify-self-end rounded-lg border border-zinc-300 text-zinc-600 hover:bg-zinc-100"
           >
-            <CloseIcon className="h-4 w-4" />
+            <CloseIcon className="h-5 w-5" />
           </button>
         </div>
 
-        <p className="shrink-0 px-4 py-3 text-sm text-zinc-600">{DONATION_POPUP_INTRO}</p>
+        <p className="shrink-0 px-6 py-4 text-base text-zinc-600">{DONATION_POPUP_INTRO}</p>
 
-        <div className="flex-1 divide-y divide-zinc-200 overflow-y-auto px-4">
+        <div className="flex-1 divide-y divide-zinc-200 overflow-y-auto px-6">
           {DONATION_PRODUCTS.map((product) => {
             const displayName = product.brand ? `${product.brand} ${product.name}` : product.name;
             return (
-              <div key={product.id} className="flex items-center gap-3 py-3">
-                <div className="relative h-16 w-16 shrink-0 overflow-hidden rounded-lg bg-donation-light">
-                  <Image src={product.imageUrl} alt={product.name} fill sizes="64px" className="object-contain p-2" />
+              <div key={product.id} className="flex items-center gap-4 py-4">
+                <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-donation-light">
+                  <Image src={product.imageUrl} alt={product.name} fill sizes="80px" className="object-contain p-2" />
                 </div>
                 <div className="min-w-0 flex-1">
-                  <p className="line-clamp-2 text-sm text-zinc-900">{displayName}</p>
-                  <div className="mt-0.5 flex items-baseline gap-2">
-                    <span className="text-sm font-bold text-zinc-900">{formatCents(product.priceCents)}</span>
-                    <span className="text-xs text-zinc-500">{product.unitSize}</span>
+                  <p className="line-clamp-2 text-base text-zinc-900">{displayName}</p>
+                  <div className="mt-1 flex items-baseline gap-2">
+                    <span className="text-base font-bold text-zinc-900">{formatCents(product.priceCents)}</span>
+                    <span className="text-sm text-zinc-500">{product.unitSize}</span>
                   </div>
                 </div>
                 <button
                   type="button"
                   onClick={() => add(product.id, "donation")}
                   aria-label={`Add 1 ${displayName} to the donation basket`}
-                  className="shrink-0 rounded-full bg-donation px-3 py-1.5 text-xs font-semibold text-white hover:bg-donation-text"
+                  className="shrink-0 rounded-full bg-donation px-4 py-2 text-sm font-semibold text-white hover:bg-donation-text"
                 >
                   + 1
                 </button>
@@ -99,18 +99,18 @@ export default function DonationPopup() {
           })}
         </div>
 
-        <div className="flex shrink-0 gap-3 border-t border-zinc-200 p-4">
+        <div className="flex shrink-0 gap-3 border-t border-zinc-200 p-6">
           <button
             type="button"
             onClick={close}
-            className="flex-1 rounded-full border border-donation bg-white px-4 py-2.5 text-sm font-semibold text-donation hover:bg-donation-light"
+            className="flex-1 rounded-full border border-donation bg-white px-5 py-3 text-base font-semibold text-donation hover:bg-donation-light"
           >
             No
           </button>
           <button
             type="button"
             onClick={donateAll}
-            className="flex-1 rounded-full bg-donation px-4 py-2.5 text-sm font-semibold text-white hover:bg-donation-text"
+            className="flex-1 rounded-full bg-donation px-5 py-3 text-base font-semibold text-white hover:bg-donation-text"
           >
             Donate All
           </button>
