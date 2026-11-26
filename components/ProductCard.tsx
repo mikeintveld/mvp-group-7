@@ -21,6 +21,7 @@ export default function ProductCard({
 
   const { getQuantity, add, increment, decrement } = useCart();
   const quantity = getQuantity(product.id, cartType);
+  const donationQuantity = getQuantity(product.id, "donation");
   const isBonus = !isDonation && (product.badges.includes("bonus") || Boolean(product.discountLabel));
   const hasOldPrice = Boolean(product.originalPriceCents);
   const displayName = product.brand ? `${product.brand} ${product.name}` : product.name;
@@ -104,6 +105,48 @@ export default function ProductCard({
             </span>
           )}
         </div>
+
+        {!isDonation && product.donationEligible && (
+          <div className="absolute bottom-2 right-2">
+            {donationQuantity === 0 ? (
+              <button
+                type="button"
+                onClick={() => add(product.id, "donation")}
+                aria-label={`Donate ${displayName} to the food bank`}
+                className="flex items-center gap-1 rounded-full bg-donation px-3 py-1.5 text-xs font-semibold text-white shadow-sm hover:bg-donation-text"
+              >
+                <HeartIcon className="h-3 w-3" />
+                Donate
+              </button>
+            ) : (
+              <div className="flex items-center gap-1 rounded-full bg-donation text-white shadow-sm">
+                <button
+                  type="button"
+                  onClick={() => decrement(product.id, "donation")}
+                  aria-label={
+                    donationQuantity === 1
+                      ? `Remove ${displayName} from donation basket`
+                      : `Decrease donation quantity of ${displayName}`
+                  }
+                  className="flex h-7 w-7 items-center justify-center hover:brightness-110"
+                >
+                  {donationQuantity === 1 ? <TrashIcon className="h-3.5 w-3.5" /> : <MinusIcon className="h-3.5 w-3.5" />}
+                </button>
+                <span className="min-w-[1rem] text-center text-xs font-semibold" aria-live="polite">
+                  {donationQuantity}
+                </span>
+                <button
+                  type="button"
+                  onClick={() => increment(product.id, "donation")}
+                  aria-label={`Increase donation quantity of ${displayName}`}
+                  className="flex h-7 w-7 items-center justify-center hover:brightness-110"
+                >
+                  <PlusIcon className="h-3.5 w-3.5" />
+                </button>
+              </div>
+            )}
+          </div>
+        )}
       </div>
 
       <div className="mt-2 flex flex-1 flex-col">
