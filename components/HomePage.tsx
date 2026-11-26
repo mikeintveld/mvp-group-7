@@ -112,7 +112,7 @@ export default function HomePage() {
           type="button"
           onClick={() => router.back()}
           aria-label="Back"
-          className="absolute left-4 top-4 flex h-9 w-9 items-center justify-center rounded-full bg-white/15 hover:bg-white/25"
+          className="absolute left-4 top-4 hidden h-9 w-9 items-center justify-center rounded-full bg-white/15 hover:bg-white/25 md:flex"
         >
           <ArrowLeftIcon className="h-5 w-5" />
         </button>

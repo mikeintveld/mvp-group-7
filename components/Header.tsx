@@ -1,6 +1,7 @@
 "use client";
 
 import Link from "next/link";
+import { usePathname } from "next/navigation";
 import { APP_NAME } from "@/lib/constants";
 import { formatCents } from "@/lib/money";
 import { useCartTotals } from "@/context/CartContext";
@@ -8,6 +9,7 @@ import { CartIcon } from "./icons";
 
 export default function Header() {
   const { itemCount, grandTotalCents } = useCartTotals();
+  const isHome = usePathname() === "/home";
 
   return (
     <header className="sticky top-0 z-20 border-b border-zinc-200 bg-white">
@@ -33,7 +35,9 @@ export default function Header() {
           )}
         </Link>
 
-        <div className="col-span-2 row-start-2 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:justify-self-center">
+        <div
+          className={`col-span-2 row-start-2 sm:col-span-1 sm:col-start-2 sm:row-start-1 sm:justify-self-center ${isHome ? "hidden md:block" : ""}`}
+        >
           <label className="block">
             <span className="sr-only">Search</span>
             <input
