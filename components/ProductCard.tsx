@@ -32,7 +32,26 @@ export default function ProductCard({
       : "bg-accent hover:brightness-110";
 
   return (
-    <article className="flex flex-col">
+    <article className="relative flex flex-col">
+      {!isDonation && product.donationEligible && (
+        <button
+          type="button"
+          aria-label="About donating to the food bank"
+          onClick={() => {
+            // Opens the "Lovingly Donating" popup (wired up in a later step).
+          }}
+          className="absolute -top-3 -left-3 z-20 flex h-14 w-14 items-center justify-center rounded-xl bg-white p-1.5 shadow-md sm:h-16 sm:w-16 lg:h-[72px] lg:w-[72px]"
+        >
+          <Image
+            src="/voedselbank-logo.png"
+            alt="Voedselbank"
+            width={72}
+            height={72}
+            className="h-full w-full object-contain"
+          />
+        </button>
+      )}
+
       <div
         className={`relative aspect-square overflow-hidden rounded-xl ${isDonation ? "bg-donation-light" : "bg-[#f2ede4]"}`}
       >
