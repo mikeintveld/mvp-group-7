@@ -31,8 +31,8 @@ export default function CartPageContent() {
     <>
       <h1 className="mx-auto w-full max-w-7xl px-4 pt-6 text-3xl font-bold text-zinc-900 sm:px-6">Shopping basket</h1>
 
-      <div className="mx-auto grid w-full max-w-7xl gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_320px]">
-        <div>
+      <div className="mx-auto grid w-full max-w-7xl grid-cols-1 gap-8 px-4 py-6 sm:px-6 lg:grid-cols-[1fr_320px]">
+        <div className="min-w-0">
           {items.length === 0 ? (
             <EmptyCart />
           ) : (

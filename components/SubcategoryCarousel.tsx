@@ -14,7 +14,7 @@ export default function SubcategoryCarousel({ items }: { items: readonly Subcate
   }
 
   return (
-    <div className="relative mx-auto mt-4 max-w-7xl px-4 sm:px-6">
+    <div className="relative mx-auto mt-4 w-full min-w-0 max-w-7xl px-4 sm:px-6">
       <div
         ref={scrollerRef}
         className="flex gap-3 overflow-x-auto pb-2 [scrollbar-width:none] [&::-webkit-scrollbar]:hidden"
