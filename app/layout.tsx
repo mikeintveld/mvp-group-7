@@ -3,6 +3,7 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import BottomNav from "@/components/BottomNav";
 import DonationPopup from "@/components/DonationPopup";
 import { CartProvider } from "@/context/CartContext";
 import { DonationPopupProvider } from "@/context/DonationPopupContext";
@@ -30,12 +31,13 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
       lang="en"
       className={`${geistSans.variable} ${geistMono.variable} h-full antialiased`}
     >
-      <body className="min-h-full flex flex-col">
+      <body className="flex min-h-full flex-col pb-[calc(3.5rem+env(safe-area-inset-bottom))] md:pb-0">
         <CartProvider>
           <DonationPopupProvider>
             <Header />
             <main className="flex flex-1 flex-col">{children}</main>
             <Footer />
+            <BottomNav />
             <DonationPopup />
           </DonationPopupProvider>
         </CartProvider>
