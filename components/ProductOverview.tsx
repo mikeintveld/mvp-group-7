@@ -21,6 +21,11 @@ const products = PRODUCTS.filter((product) => product.category === CATEGORY_PAST
 export default function ProductOverview() {
   const [activeBadges, setActiveBadges] = useState<Set<ProductBadge>>(new Set());
   const [donationActive, setDonationActive] = useState(false);
+  const [activeSubcategory, setActiveSubcategory] = useState<string | null>(null);
+
+  function toggleSubcategory(name: string) {
+    setActiveSubcategory((prev) => (prev === name ? null : name));
+  }
 
   function toggleChip(key: string) {
     if (key === "donation") {
@@ -42,12 +47,14 @@ export default function ProductOverview() {
   function clearFilters() {
     setActiveBadges(new Set());
     setDonationActive(false);
+    setActiveSubcategory(null);
   }
 
   const filteredProducts = products.filter((product) => {
     const matchesBadges = [...activeBadges].every((badge) => product.badges.includes(badge));
     const matchesDonation = !donationActive || product.donationEligible;
-    return matchesBadges && matchesDonation;
+    const matchesSubcategory = !activeSubcategory || product.subcategory === activeSubcategory;
+    return matchesBadges && matchesDonation && matchesSubcategory;
   });
 
   const chips: FilterChip[] = [
@@ -72,7 +79,7 @@ export default function ProductOverview() {
       <h1 className="mx-auto w-full max-w-7xl px-4 pt-4 text-3xl font-bold text-zinc-900 sm:px-6">
         {CATEGORY_PASTA_RICE_WORLD_CUISINE}
       </h1>
-      <SubcategoryCarousel items={SUBCATEGORIES} />
+      <SubcategoryCarousel items={SUBCATEGORIES} activeName={activeSubcategory} onSelect={toggleSubcategory} />
       <FilterChips chips={chips} onToggle={toggleChip} />
       {filteredProducts.length === 0 ? (
         <div className="mx-auto flex max-w-7xl flex-col items-center gap-4 px-4 py-16 text-center sm:px-6">

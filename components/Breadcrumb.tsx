@@ -1,13 +1,9 @@
 import Link from "next/link";
-import { ArrowLeftIcon, ChevronRightIcon } from "./icons";
+import { ChevronRightIcon } from "./icons";
 
 export default function Breadcrumb({ category }: { category: string }) {
   return (
     <nav aria-label="Breadcrumb" className="mx-auto w-full max-w-7xl px-4 pt-4 text-sm text-zinc-600 sm:px-6">
-      <Link href="/" className="mb-2 hidden items-center gap-1 font-medium text-zinc-900 hover:text-accent md:inline-flex">
-        <ArrowLeftIcon className="h-4 w-4" />
-        Back
-      </Link>
       <ol className="flex flex-wrap items-center gap-1">
         <li>
           <Link href="/" className="hover:text-accent">
