@@ -4,6 +4,7 @@ import Image from "next/image";
 import type { Product } from "@/lib/types";
 import { formatCents } from "@/lib/money";
 import { useCart } from "@/context/CartContext";
+import { useDonationPopup } from "@/context/DonationPopupContext";
 import { HeartIcon, LeafIcon, MinusIcon, PlusIcon, SproutIcon, TrashIcon } from "./icons";
 
 type ProductCardVariant = "default" | "donation";
@@ -20,6 +21,7 @@ export default function ProductCard({
   const basketLabel = isDonation ? "donation basket" : "basket";
 
   const { getQuantity, add, increment, decrement } = useCart();
+  const { open: openDonationPopup } = useDonationPopup();
   const quantity = getQuantity(product.id, cartType);
   const donationQuantity = getQuantity(product.id, "donation");
   const isBonus = !isDonation && (product.badges.includes("bonus") || Boolean(product.discountLabel));
@@ -38,9 +40,7 @@ export default function ProductCard({
         <button
           type="button"
           aria-label="About donating to the food bank"
-          onClick={() => {
-            // Opens the "Lovingly Donating" popup (wired up in a later step).
-          }}
+          onClick={openDonationPopup}
           className="absolute -top-3 -left-3 z-20 flex h-14 w-14 items-center justify-center rounded-xl bg-white p-1.5 shadow-md sm:h-16 sm:w-16 lg:h-[72px] lg:w-[72px]"
         >
           <Image

@@ -3,7 +3,9 @@ import { Geist, Geist_Mono } from "next/font/google";
 import "./globals.css";
 import Header from "@/components/Header";
 import Footer from "@/components/Footer";
+import DonationPopup from "@/components/DonationPopup";
 import { CartProvider } from "@/context/CartContext";
+import { DonationPopupProvider } from "@/context/DonationPopupContext";
 import { APP_NAME } from "@/lib/constants";
 
 const geistSans = Geist({
@@ -30,9 +32,12 @@ export default function RootLayout({ children }: LayoutProps<"/">) {
     >
       <body className="min-h-full flex flex-col">
         <CartProvider>
-          <Header />
-          <main className="flex flex-1 flex-col">{children}</main>
-          <Footer />
+          <DonationPopupProvider>
+            <Header />
+            <main className="flex flex-1 flex-col">{children}</main>
+            <Footer />
+            <DonationPopup />
+          </DonationPopupProvider>
         </CartProvider>
       </body>
     </html>
