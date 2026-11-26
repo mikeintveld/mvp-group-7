@@ -7,13 +7,13 @@ import { formatCents } from "@/lib/money";
 import { DONATION_POPUP_INTRO } from "@/lib/constants";
 import { useCart } from "@/context/CartContext";
 import { useDonationPopup } from "@/context/DonationPopupContext";
-import { CloseIcon } from "./icons";
+import { CloseIcon, MinusIcon, PlusIcon, TrashIcon } from "./icons";
 
 const DONATION_PRODUCTS = PRODUCTS.filter((product) => product.donationEligible);
 
 export default function DonationPopup() {
   const { isOpen, close } = useDonationPopup();
-  const { add } = useCart();
+  const { add, increment, decrement, getQuantity } = useCart();
   const dialogRef = useRef<HTMLDivElement>(null);
 
   useEffect(() => {
@@ -52,7 +52,7 @@ export default function DonationPopup() {
         aria-labelledby="donation-popup-title"
         tabIndex={-1}
         onClick={(event) => event.stopPropagation()}
-        className="flex max-h-[95vh] w-full max-w-xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl outline-none sm:max-h-[85vh]"
+        className="flex max-h-[95dvh] w-full max-w-xl flex-col overflow-hidden rounded-2xl bg-white shadow-xl outline-none sm:max-h-[85dvh]"
       >
         <div className="grid shrink-0 grid-cols-[3rem_1fr_3rem] items-center border-b border-zinc-200 px-6 py-4">
           <div />
@@ -74,6 +74,7 @@ export default function DonationPopup() {
         <div className="flex-1 divide-y divide-zinc-200 overflow-y-auto px-6">
           {DONATION_PRODUCTS.map((product) => {
             const displayName = product.brand ? `${product.brand} ${product.name}` : product.name;
+            const quantity = getQuantity(product.id, "donation");
             return (
               <div key={product.id} className="flex items-center gap-4 py-4">
                 <div className="relative h-20 w-20 shrink-0 overflow-hidden rounded-lg bg-donation-light">
@@ -86,14 +87,42 @@ export default function DonationPopup() {
                     <span className="text-sm text-zinc-500">{product.unitSize}</span>
                   </div>
                 </div>
-                <button
-                  type="button"
-                  onClick={() => add(product.id, "donation")}
-                  aria-label={`Add 1 ${displayName} to the donation basket`}
-                  className="shrink-0 rounded-full bg-donation px-4 py-2 text-sm font-semibold text-white hover:bg-donation-text"
-                >
-                  + 1
-                </button>
+                {quantity === 0 ? (
+                  <button
+                    type="button"
+                    onClick={() => add(product.id, "donation")}
+                    aria-label={`Add 1 ${displayName} to the donation basket`}
+                    className="shrink-0 rounded-full bg-donation px-4 py-2 text-sm font-semibold text-white hover:bg-donation-text"
+                  >
+                    + 1
+                  </button>
+                ) : (
+                  <div className="flex shrink-0 items-center gap-1 rounded-full bg-donation text-white">
+                    <button
+                      type="button"
+                      onClick={() => decrement(product.id, "donation")}
+                      aria-label={
+                        quantity === 1
+                          ? `Remove ${displayName} from the donation basket`
+                          : `Decrease donation quantity of ${displayName}`
+                      }
+                      className="flex h-9 w-9 items-center justify-center hover:brightness-110"
+                    >
+                      {quantity === 1 ? <TrashIcon className="h-4 w-4" /> : <MinusIcon className="h-4 w-4" />}
+                    </button>
+                    <span className="min-w-[1.25rem] text-center text-sm font-semibold" aria-live="polite">
+                      {quantity}
+                    </span>
+                    <button
+                      type="button"
+                      onClick={() => increment(product.id, "donation")}
+                      aria-label={`Increase donation quantity of ${displayName}`}
+                      className="flex h-9 w-9 items-center justify-center hover:brightness-110"
+                    >
+                      <PlusIcon className="h-4 w-4" />
+                    </button>
+                  </div>
+                )}
               </div>
             );
           })}
